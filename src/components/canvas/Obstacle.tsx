@@ -3,21 +3,22 @@ import type { Mesh } from 'three';
 import { TILE_SIZE, WALL_HEIGHT, WALL_THICKNESS } from '@/misc/constants';
 import { GameObjects } from '@/misc/enums';
 
-export enum WallType {
-	'horizontal',
-	'vertical',
+export enum ObstacleDirection {
+	HORIZONTAL,
+	VERTICAL,
 }
 
-type WallProps = {
+type ObstacleProps = {
 	position: Triplet;
-	type: WallType;
+	direction: ObstacleDirection;
+	type: GameObjects.WALL | GameObjects.EXIT;
 };
 
-const Wall = ({ position, type }: WallProps) => {
+const Wall = ({ position, direction, type }: ObstacleProps) => {
 	position[1] += WALL_HEIGHT / 2;
 	let rot: number;
 
-	if (type === WallType.horizontal) {
+	if (direction === ObstacleDirection.HORIZONTAL) {
 		position[0] += TILE_SIZE / 2;
 		rot = Math.PI / 2;
 	} else {
@@ -31,17 +32,19 @@ const Wall = ({ position, type }: WallProps) => {
 		position: position,
 		args: size,
 		type: 'Static',
-		name: 'Wall',
 		rotation: [0, rot, 0],
 		userData: {
-			type: GameObjects.WALL,
+			type: type,
 		},
 	}));
 
 	return (
 		<mesh receiveShadow castShadow ref={ref}>
 			<boxBufferGeometry attach="geometry" args={size} />
-			<meshLambertMaterial attach="material" />
+			<meshLambertMaterial
+				attach="material"
+				color={type === GameObjects.EXIT ? 'red' : 'gray'}
+			/>
 		</mesh>
 	);
 };

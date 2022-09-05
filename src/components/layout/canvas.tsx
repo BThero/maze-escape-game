@@ -6,15 +6,14 @@ const CanvasWrapper = ({ children }) => {
 	return (
 		<>
 			<Canvas
-				// @ts-ignore
-				mode="concurrent"
 				shadows={true}
 				style={{
 					position: 'absolute',
 					top: 0,
+					left: 0,
 				}}
 			>
-				<Stats />
+				{/* <Stats showPanel={0} /> */}
 				<Preload all />
 				{children}
 			</Canvas>

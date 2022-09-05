@@ -11,8 +11,8 @@ const Flashlight = () => {
 
 	const direction = useStore((state) => state.player.velocity.direction);
 	const position = useStore((state) => state.player.position);
-	const lightRef = useRef<SpotLight>();
-	const targetRef = useRef<Object3D>();
+	const lightRef = useRef<SpotLight | null>(null);
+	const targetRef = useRef<Object3D | null>(null);
 
 	useHelper(lightRef, SpotLightHelper, 'white');
 

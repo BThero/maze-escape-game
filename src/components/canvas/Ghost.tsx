@@ -1,6 +1,7 @@
 import { Triplet, useBox } from '@react-three/cannon';
-import type { Mesh } from 'three';
+import type { Mesh, PointLight } from 'three';
 import { GameObjects } from '@/misc/enums';
+import { useEffect, useRef } from 'react';
 
 const Ghost = () => {
 	const initialPosition: Triplet = [5, 1, 5];
@@ -17,14 +18,29 @@ const Ghost = () => {
 			type: GameObjects.GHOST,
 		},
 	}));
+	const glowRef = useRef<PointLight | null>(null);
+
+	useEffect(() => {
+		// const unsubscribe = api.position.subscribe((v) => {
+		// 	glowRef.current.position.x = v[0];
+		// 	glowRef.current.position.y = v[1];
+		// 	glowRef.current.position.z = v[2];
+		// });
+		// return unsubscribe;
+	});
 
 	return (
-		<>
+		<group>
 			<mesh ref={ref} receiveShadow>
-				<meshStandardMaterial color="red" />
+				<meshStandardMaterial
+					color="white"
+					// emissive="white"
+					// emissiveIntensity={0.1}
+				/>
 				<boxGeometry />
 			</mesh>
-		</>
+			{/* <pointLight ref={glowRef} intensity={0.2} distance={2} color="white" /> */}
+		</group>
 	);
 };
 
