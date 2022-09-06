@@ -1,4 +1,4 @@
-import { Triplet, useBox } from '@react-three/cannon';
+import { Triplet, useSphere } from '@react-three/cannon';
 import type { Mesh, PointLight } from 'three';
 import { GameObjects } from '@/misc/enums';
 import { useEffect, useRef } from 'react';
@@ -21,10 +21,10 @@ type GLTFResult = GLTF & {
 const Ghost = (props: JSX.IntrinsicElements['group']) => {
 	const { nodes, materials } = useGLTF('models/ghost2.glb') as GLTFResult;
 	const initialPosition: Triplet = [5, 1, 5];
-	const [_ref, api] = useBox<Mesh>(() => ({
+	const [_ref, api] = useSphere<Mesh>(() => ({
 		mass: 1,
 		position: initialPosition,
-		args: [1, 1, 1],
+		args: [0.6],
 		onCollide: (e) => {
 			if (e.body.userData?.type === GameObjects.HUMAN) {
 				console.log('player lost');
@@ -54,10 +54,14 @@ const Ghost = (props: JSX.IntrinsicElements['group']) => {
 			<mesh
 				geometry={nodes.Object_7.geometry}
 				material={materials['01_-_Default.002']}
+				castShadow
+				receiveShadow
 			/>
 			<mesh
 				geometry={nodes.Object_8.geometry}
 				material={materials['02_-_Default.002']}
+				castShadow
+				receiveShadow
 			/>
 		</group>
 	);

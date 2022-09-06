@@ -15,7 +15,7 @@ type ObstacleProps = {
 	type: GameObjects.WALL | GameObjects.EXIT;
 };
 
-const Wall = ({ position, direction, type }: ObstacleProps) => {
+const Obstacle = ({ position, direction, type }: ObstacleProps) => {
 	position[1] += WALL_HEIGHT / 2;
 	let rot: number;
 
@@ -53,4 +53,4 @@ const Wall = ({ position, direction, type }: ObstacleProps) => {
 	);
 };
 
-export default Wall;
+export default Obstacle;

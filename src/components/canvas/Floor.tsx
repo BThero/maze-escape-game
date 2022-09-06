@@ -4,7 +4,7 @@ import { GameObjects } from '@/misc/enums';
 import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
-const Ground = (props: PlaneProps) => {
+const Floor = (props: PlaneProps) => {
 	const [ref] = usePlane<Mesh>(() => ({
 		rotation: [-Math.PI / 2, 0, 0],
 		...props,
@@ -23,7 +23,7 @@ const Ground = (props: PlaneProps) => {
 	});
 
 	return (
-		<mesh ref={ref}>
+		<mesh ref={ref} receiveShadow castShadow>
 			<planeGeometry args={[100, 100]} />
 			<meshStandardMaterial
 				{...textureProps}
@@ -44,4 +44,4 @@ const Ground = (props: PlaneProps) => {
 	);
 };
 
-export default Ground;
+export default Floor;

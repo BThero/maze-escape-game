@@ -60,6 +60,7 @@ export const PlayerControls = () => {
 			}
 		});
 		const components = extractVectorComponents(newState.velocity);
+		ref.current.rotation.y = -newState.velocity.direction - Math.PI / 2;
 		api.velocity.set(...components);
 		updatePlayer(newState);
 	});

@@ -1,5 +1,5 @@
 import { Physics, Debug, Triplet } from '@react-three/cannon';
-import Ground from '@/components/canvas/Ground';
+import Floor from '@/components/canvas/Floor';
 import Player from '@/components/canvas/Player';
 import Ghost from '@/components/canvas/Ghost';
 import Flashlight from '@/components/canvas/Flashlight';
@@ -70,13 +70,14 @@ const R3F = () => {
 			<Camera />
 			{/* <ambientLight intensity={0.05} /> */}
 			<Physics gravity={[0, -50, 0]} isPaused={state !== GameState.RUNNING}>
-				{/* <Debug color="black" scale={1.1}> */}
-				<Ground />
-				<Player />
-				<Ghost />
-				<Flashlight />
-				{walls}
-				{/* </Debug> */}
+				<Debug color="black" scale={1.1}>
+					<Floor />
+					<Player />
+					<Ghost />
+					<Flashlight />
+					{/* <ambientLight /> */}
+					{walls}
+				</Debug>
 			</Physics>
 		</>
 	);
