@@ -1,6 +1,8 @@
 import { usePlane, PlaneProps } from '@react-three/cannon';
 import type { Mesh } from 'three';
 import { GameObjects } from '@/misc/enums';
+import { useTexture } from '@react-three/drei';
+import * as THREE from 'three';
 
 const Ground = (props: PlaneProps) => {
 	const [ref] = usePlane<Mesh>(() => ({
@@ -12,10 +14,32 @@ const Ground = (props: PlaneProps) => {
 		},
 	}));
 
+	const textureProps = useTexture({
+		map: 'textures/Concrete material 1/baseColor.jpeg',
+		normalMap: 'textures/Concrete material 1/normal.jpeg',
+		roughnessMap: 'textures/Concrete material 1/roughness.jpeg',
+		aoMap: 'textures/Concrete material 1/ambientOcclusion.jpeg',
+		metalnessMap: 'textures/Concrete material 1/metallic.jpeg',
+	});
+
 	return (
 		<mesh ref={ref}>
 			<planeGeometry args={[100, 100]} />
-			<meshPhysicalMaterial color="darkgrey" />
+			<meshStandardMaterial
+				{...textureProps}
+				map-wrapS={THREE.RepeatWrapping}
+				map-wrapT={THREE.RepeatWrapping}
+				map-repeat={[20, 20]}
+				metalness={1} // set to 1 to use 100% of the metalnessMap
+				metalnessMap-wrapS={THREE.RepeatWrapping}
+				metalnessMap-wrapT={THREE.RepeatWrapping}
+				normalMap-wrapS={THREE.RepeatWrapping}
+				normalMap-wrapT={THREE.RepeatWrapping}
+				normalMap-encoding={THREE.LinearEncoding}
+				roughness={1} // set to 1 to use 100% of the roughnessMap
+				roughnessMap-wrapS={THREE.RepeatWrapping}
+				roughnessMap-wrapT={THREE.RepeatWrapping}
+			/>
 		</mesh>
 	);
 };
