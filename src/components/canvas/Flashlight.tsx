@@ -2,9 +2,8 @@ import { useEffect, useRef } from 'react';
 import { Triplet } from '@react-three/cannon';
 import useStore from '@/misc/store';
 import { extractVectorComponents, addTriplets } from '@/misc/utils';
-import { Object3D, SpotLight, SpotLightHelper } from 'three';
+import { Object3D, SpotLight } from 'three';
 import { useThree } from '@react-three/fiber';
-import { useHelper } from '@react-three/drei';
 
 const Flashlight = () => {
 	const { scene } = useThree();

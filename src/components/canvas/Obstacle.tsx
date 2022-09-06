@@ -4,22 +4,16 @@ import { TILE_SIZE, WALL_HEIGHT, WALL_THICKNESS } from '@/misc/constants';
 import { GameObjects } from '@/misc/enums';
 import { useTexture } from '@react-three/drei';
 
-export enum ObstacleDirection {
-	HORIZONTAL,
-	VERTICAL,
-}
-
 type ObstacleProps = {
 	position: Triplet;
-	direction: ObstacleDirection;
-	type: GameObjects.WALL | GameObjects.EXIT;
+	type: GameObjects.HORIZONTAL_WALL | GameObjects.VERTICAL_WALL;
 };
 
-const Obstacle = ({ position, direction, type }: ObstacleProps) => {
+const Obstacle = ({ position, type }: ObstacleProps) => {
 	position[1] += WALL_HEIGHT / 2;
 	let rot: number;
 
-	if (direction === ObstacleDirection.HORIZONTAL) {
+	if (type === GameObjects.HORIZONTAL_WALL) {
 		position[0] += TILE_SIZE / 2;
 		rot = Math.PI / 2;
 	} else {

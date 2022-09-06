@@ -2,7 +2,7 @@ import { PublicApi } from '@react-three/cannon';
 import { RefObject } from 'react';
 import type { Group } from 'three';
 import create from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import { Triplet } from '@react-three/cannon';
 import produce from 'immer';
 import { GameState, GameEvent } from '@/misc/enums';
@@ -20,6 +20,10 @@ export interface AppState {
 	/* PLAYER */
 	player: PlayerModel;
 	updatePlayer: (changes: Partial<PlayerModel>) => void;
+
+	/* GHOST */
+	ghost: PlayerModel;
+	updateGhost: (changes: Partial<PlayerModel>) => void;
 
 	/* KEYS */
 	pressedKeys: Array<string>;
@@ -55,89 +59,105 @@ const restartGame = (state: AppState): AppState => {
 	return state;
 };
 
+const playerDefaultState: PlayerModel = {
+	obj: [null, null],
+	position: [0, 0, 0],
+	velocity: {
+		direction: 0,
+		magnitude: 0,
+	},
+};
+
 export const useStore = create<AppState>()(
-	devtools((set) => ({
-		/* PLAYER */
-		player: {
-			obj: [null, null],
-			position: [0, 0, 0],
-			velocity: {
-				direction: 0,
-				magnitude: 0,
-			},
-		},
-		updatePlayer: (changes) =>
-			set(
-				produce((state: AppState) => {
-					state.player = { ...state.player, ...changes };
-				})
-			),
+	persist(
+		devtools((set) => ({
+			/* PLAYER */
+			player: playerDefaultState,
+			updatePlayer: (changes) =>
+				set(
+					produce((state: AppState) => {
+						state.player = { ...state.player, ...changes };
+					})
+				),
 
-		/* KEYS */
-		pressedKeys: [],
-		addKey: (key) =>
-			set(
-				produce((state: AppState) => {
-					if (!state.pressedKeys.includes(key)) {
-						state.pressedKeys.push(key);
-					}
-				})
-			),
-		removeKey: (key) =>
-			set(
-				produce((state: AppState) => {
-					state.pressedKeys = state.pressedKeys.filter((x) => x != key);
-				})
-			),
+			/* GHOST */
+			ghost: playerDefaultState,
+			updateGhost: (changes) =>
+				set(
+					produce((state: AppState) => {
+						state.ghost = { ...state.ghost, ...changes };
+					})
+				),
 
-		/* GAME STATE */
-		state: GameState.MENU,
-		send: (e) =>
-			set(
-				produce((state: AppState) => {
-					switch (state.state) {
-						case GameState.MENU: {
-							if (e === GameEvent.START) {
-								state = restartGame(state);
+			/* KEYS */
+			pressedKeys: [],
+			addKey: (key) =>
+				set(
+					produce((state: AppState) => {
+						if (!state.pressedKeys.includes(key)) {
+							state.pressedKeys.push(key);
+						}
+					})
+				),
+			removeKey: (key) =>
+				set(
+					produce((state: AppState) => {
+						state.pressedKeys = state.pressedKeys.filter((x) => x != key);
+					})
+				),
+
+			/* GAME STATE */
+			state: GameState.MENU,
+			send: (e) =>
+				set(
+					produce((state: AppState) => {
+						switch (state.state) {
+							case GameState.MENU: {
+								if (e === GameEvent.START) {
+									state = restartGame(state);
+								}
+
+								break;
 							}
 
-							break;
-						}
+							case GameState.RUNNING: {
+								if (e === GameEvent.LOST) {
+									state.state = GameState.LOST;
+								}
 
-						case GameState.RUNNING: {
-							if (e === GameEvent.LOST) {
-								state.state = GameState.LOST;
+								if (e === GameEvent.WON) {
+									state.state = GameState.WON;
+								}
+
+								break;
 							}
 
-							if (e === GameEvent.WON) {
-								state.state = GameState.WON;
+							case GameState.WON: {
+								if (e === GameEvent.START) {
+									state = restartGame(state);
+								}
+
+								break;
 							}
 
-							break;
-						}
+							case GameState.LOST: {
+								if (e === GameEvent.START) {
+									state = restartGame(state);
+								}
 
-						case GameState.WON: {
-							if (e === GameEvent.START) {
-								state = restartGame(state);
+								break;
 							}
 
-							break;
-						}
-
-						case GameState.LOST: {
-							if (e === GameEvent.START) {
-								state = restartGame(state);
+							default: {
 							}
-
-							break;
 						}
-
-						default: {
-						}
-					}
-				})
-			),
-	}))
+					})
+				),
+		})),
+		{
+			name: 'game-map',
+		}
+	)
 );
 
 export default useStore;

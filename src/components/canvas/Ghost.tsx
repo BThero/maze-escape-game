@@ -1,11 +1,11 @@
 import { Triplet, useSphere } from '@react-three/cannon';
-import type { Mesh, PointLight } from 'three';
 import { GameObjects } from '@/misc/enums';
 import { useEffect, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
+import useStore from '@/misc/store';
 
 type GLTFResult = GLTF & {
 	nodes: {
@@ -19,11 +19,12 @@ type GLTFResult = GLTF & {
 };
 
 const Ghost = (props: JSX.IntrinsicElements['group']) => {
+	const group = useRef<THREE.Group>();
+	const updateGhost = useStore((store) => store.updateGhost);
 	const { nodes, materials } = useGLTF('models/ghost2.glb') as GLTFResult;
-	const initialPosition: Triplet = [5, 1, 5];
-	const [_ref, api] = useSphere<Mesh>(() => ({
+	const [_ref, api] = useSphere<THREE.Mesh>(() => ({
 		mass: 1,
-		position: initialPosition,
+		position: [5, 1, 5],
 		args: [0.6],
 		onCollide: (e) => {
 			if (e.body.userData?.type === GameObjects.HUMAN) {
@@ -34,7 +35,14 @@ const Ghost = (props: JSX.IntrinsicElements['group']) => {
 			type: GameObjects.GHOST,
 		},
 	}));
-	const group = useRef<THREE.Group>();
+
+	useEffect(() => {
+		if (group.current) {
+			updateGhost({
+				obj: [group, api],
+			});
+		}
+	}, [group, api, updateGhost]);
 
 	useEffect(() => {
 		const unsubscribe = api.position.subscribe((v) => {
@@ -43,10 +51,6 @@ const Ghost = (props: JSX.IntrinsicElements['group']) => {
 			group.current.position.z = v[2];
 		});
 		return unsubscribe;
-	});
-
-	useFrame(() => {
-		api.velocity.set(-0.5, 0, 0);
 	});
 
 	return (

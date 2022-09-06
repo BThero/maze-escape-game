@@ -3,12 +3,13 @@ import Floor from '@/components/canvas/Floor';
 import Player from '@/components/canvas/Player';
 import Ghost from '@/components/canvas/Ghost';
 import Flashlight from '@/components/canvas/Flashlight';
-import Obstacle, { ObstacleDirection } from '@/components/canvas/Obstacle';
+import Obstacle from '@/components/canvas/Obstacle';
 import Camera from '@/components/canvas/Camera';
 import { ROWS, COLUMNS, TILE_SIZE } from '@/misc/constants';
 import { PlayerControls } from '@/components/canvas/PlayerControls';
 import useStore from '@/misc/store';
 import { GameEvent, GameObjects, GameState } from '@/misc/enums';
+import PlayerLighting from '@/components/canvas/PlayerLighting';
 
 /* DOM */
 import WelcomeScreen from '@/components/dom/WelcomeScreen';
@@ -41,26 +42,16 @@ const R3F = () => {
 	const state = useStore((state) => state.state);
 	const walls = Array.from({ length: ROWS }).map((_, i) => {
 		return Array.from({ length: COLUMNS }).map((_, j) => {
-			return [ObstacleDirection.VERTICAL, ObstacleDirection.HORIZONTAL].map(
-				(direction, index) => {
-					if (Math.random() < 0.3) {
-						const base: Triplet = [i * TILE_SIZE, 0, j * TILE_SIZE];
-						const type =
-							Math.random() < 0.1 ? GameObjects.EXIT : GameObjects.WALL;
+			const types: Array<
+				GameObjects.VERTICAL_WALL | GameObjects.HORIZONTAL_WALL
+			> = [GameObjects.VERTICAL_WALL, GameObjects.HORIZONTAL_WALL];
 
-						return (
-							<Obstacle
-								position={base}
-								direction={direction}
-								type={type}
-								key={index}
-							/>
-						);
-					} else {
-						return null;
-					}
+			return types.map((type, index) => {
+				if (Math.random() < 0.3) {
+					const base: Triplet = [i * TILE_SIZE, 0, j * TILE_SIZE];
+					return <Obstacle position={base} type={type} key={index} />;
 				}
-			);
+			});
 		});
 	});
 
@@ -68,16 +59,15 @@ const R3F = () => {
 		<>
 			<PlayerControls />
 			<Camera />
-			{/* <ambientLight intensity={0.05} /> */}
+			<PlayerLighting />
 			<Physics gravity={[0, -50, 0]} isPaused={state !== GameState.RUNNING}>
-				<Debug color="black" scale={1.1}>
-					<Floor />
-					<Player />
-					<Ghost />
-					<Flashlight />
-					{/* <ambientLight /> */}
-					{walls}
-				</Debug>
+				{/* <Debug color="black" scale={1.1}> */}
+				<Floor />
+				<Player />
+				<Ghost />
+				<Flashlight />
+				{walls}
+				{/* </Debug> */}
 			</Physics>
 		</>
 	);

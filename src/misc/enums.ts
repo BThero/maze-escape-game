@@ -1,6 +1,7 @@
 export enum GameObjects {
 	EXIT,
-	WALL,
+	HORIZONTAL_WALL,
+	VERTICAL_WALL,
 	HUMAN,
 	GHOST,
 	FLASHLIGHT,

@@ -89,10 +89,8 @@ const Player = (props: JSX.IntrinsicElements['group']) => {
 		<group ref={group} {...props} dispose={null}>
 			<mesh
 				geometry={nodes.armLeft_1.geometry}
-				// material={materials['textile.002']}
-			>
-				<meshBasicMaterial attach="material" />
-			</mesh>
+				material={materials['textile.002']}
+			/>
 			<mesh
 				geometry={nodes.armLeft_2.geometry}
 				material={materials['wood.015']}

@@ -4,7 +4,7 @@ import type { Color, Group } from 'three';
 
 type SceneLightProps = {
 	target: [RefObject<Group>, PublicApi];
-	color?: Color;
+	color?: Color | string;
 };
 
 const SceneLight = ({ target, color }: SceneLightProps) => {
@@ -12,14 +12,17 @@ const SceneLight = ({ target, color }: SceneLightProps) => {
 
 	useEffect(() => {
 		const api = target[1];
-		const unsub = api.position.subscribe((v) => {
-			if (ref.current) {
-				ref.current.position.x = v[0];
-				ref.current.position.z = v[2];
-			}
-		});
 
-		return unsub;
+		if (api) {
+			const unsub = api.position.subscribe((v) => {
+				if (ref.current) {
+					ref.current.position.x = v[0];
+					ref.current.position.z = v[2];
+				}
+			});
+
+			return unsub;
+		}
 	}, [target]);
 
 	return (
