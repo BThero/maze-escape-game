@@ -1,6 +1,6 @@
 import { PublicApi } from '@react-three/cannon';
 import { RefObject } from 'react';
-import type { Mesh } from 'three';
+import type { Group } from 'three';
 import create from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { Triplet } from '@react-three/cannon';
@@ -8,7 +8,7 @@ import produce from 'immer';
 import { GameState, GameEvent } from '@/misc/enums';
 
 interface PlayerModel {
-	obj: [RefObject<Mesh>, PublicApi];
+	obj: [RefObject<Group>, PublicApi];
 	position: Triplet;
 	velocity: {
 		direction: number;
@@ -59,7 +59,7 @@ export const useStore = create<AppState>()(
 	devtools((set) => ({
 		/* PLAYER */
 		player: {
-			obj: null,
+			obj: [null, null],
 			position: [0, 0, 0],
 			velocity: {
 				direction: 0,

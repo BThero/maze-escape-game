@@ -2,6 +2,7 @@ import { Triplet, useBox } from '@react-three/cannon';
 import type { Mesh } from 'three';
 import { TILE_SIZE, WALL_HEIGHT, WALL_THICKNESS } from '@/misc/constants';
 import { GameObjects } from '@/misc/enums';
+import { useTexture } from '@react-three/drei';
 
 export enum ObstacleDirection {
 	HORIZONTAL,
@@ -14,7 +15,7 @@ type ObstacleProps = {
 	type: GameObjects.WALL | GameObjects.EXIT;
 };
 
-const Wall = ({ position, direction, type }: ObstacleProps) => {
+const Obstacle = ({ position, direction, type }: ObstacleProps) => {
 	position[1] += WALL_HEIGHT / 2;
 	let rot: number;
 
@@ -27,7 +28,6 @@ const Wall = ({ position, direction, type }: ObstacleProps) => {
 	}
 
 	const size: Triplet = [WALL_THICKNESS, WALL_HEIGHT, TILE_SIZE];
-
 	const [ref] = useBox<Mesh>(() => ({
 		position: position,
 		args: size,
@@ -38,15 +38,19 @@ const Wall = ({ position, direction, type }: ObstacleProps) => {
 		},
 	}));
 
+	const textureProps = useTexture({
+		map: 'textures/BrickWall/baseColor.jpeg',
+		normalMap: 'textures/BrickWall/normal.jpeg',
+		roughnessMap: 'textures/BrickWall/roughness.jpeg',
+		aoMap: 'textures/BrickWall/ambientOcclusion.jpeg',
+	});
+
 	return (
 		<mesh receiveShadow castShadow ref={ref}>
 			<boxBufferGeometry attach="geometry" args={size} />
-			<meshLambertMaterial
-				attach="material"
-				color={type === GameObjects.EXIT ? 'red' : 'gray'}
-			/>
+			<meshStandardMaterial attach="material" {...textureProps} />
 		</mesh>
 	);
 };
 
-export default Wall;
+export default Obstacle;
