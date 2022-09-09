@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import { GameObjects } from './enums';
 import produce from 'immer';
 
@@ -12,49 +12,33 @@ export type GameObject = {
 		| GameObjects.EXIT;
 };
 
-export type GameDimensions = {
-	rows: number;
-	columns: number;
-};
-
 export interface MapState {
-	dimensions: GameDimensions;
-	setDimensions: (value: Partial<GameDimensions>) => void;
-
 	objects: Array<GameObject>;
-	addObject: (value: GameObject) => void;
-	removeObject: (value: GameObject) => void;
+	toggleObject: (value: GameObject) => void;
+	clearObjects: () => void;
 }
 
 export const useMapStore = create<MapState>()(
 	devtools((set) => ({
-		dimensions: {
-			rows: 15,
-			columns: 15,
-		},
-		setDimensions: (value) =>
-			set(
-				produce((state: MapState) => {
-					state.dimensions = {
-						...state.dimensions,
-						...value,
-					};
-				})
-			),
-
 		objects: [],
-		addObject: (value) =>
+		toggleObject: (value) =>
 			set(
 				produce((state: MapState) => {
-					if (!state.objects.includes(value)) {
+					const index = state.objects.findIndex(
+						(item) => JSON.stringify(item) === JSON.stringify(value)
+					);
+
+					if (index === -1) {
 						state.objects.push(value);
+					} else {
+						state.objects.splice(index, 1);
 					}
 				})
 			),
-		removeObject: (value) =>
+		clearObjects: () =>
 			set(
 				produce((state: MapState) => {
-					state.objects = state.objects.filter((item) => item !== value);
+					state.objects = [];
 				})
 			),
 	}))

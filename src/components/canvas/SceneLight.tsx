@@ -13,7 +13,7 @@ const SceneLight = ({ target, color }: SceneLightProps) => {
 	useEffect(() => {
 		const api = target[1];
 
-		if (api) {
+		if (api?.position?.subscribe) {
 			const unsub = api.position.subscribe((v) => {
 				if (ref.current) {
 					ref.current.position.x = v[0];
@@ -30,7 +30,7 @@ const SceneLight = ({ target, color }: SceneLightProps) => {
 			ref={ref}
 			color={color || 'white'}
 			intensity={0.2}
-			angle={0.1}
+			angle={0.12}
 			position={[0, 5, 0]}
 			target={target[0]?.current}
 		/>

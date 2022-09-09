@@ -61,13 +61,11 @@ const R3F = () => {
 			<Camera />
 			<PlayerLighting />
 			<Physics gravity={[0, -50, 0]} isPaused={state !== GameState.RUNNING}>
-				{/* <Debug color="black" scale={1.1}> */}
 				<Floor />
 				<Player />
 				<Ghost />
 				<Flashlight />
 				{walls}
-				{/* </Debug> */}
 			</Physics>
 		</>
 	);

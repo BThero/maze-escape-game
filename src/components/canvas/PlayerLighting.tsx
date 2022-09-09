@@ -8,7 +8,7 @@ const PlayerLighting = () => {
 	return (
 		<>
 			<SceneLight target={player.obj} color="white" />
-			<SceneLight target={ghost.obj} color="white" />
+			{/* <SceneLight target={ghost.obj} color="white" /> */}
 		</>
 	);
 };

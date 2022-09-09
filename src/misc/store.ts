@@ -2,7 +2,7 @@ import { PublicApi } from '@react-three/cannon';
 import { RefObject } from 'react';
 import type { Group } from 'three';
 import create from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
 import { Triplet } from '@react-three/cannon';
 import produce from 'immer';
 import { GameState, GameEvent } from '@/misc/enums';
@@ -20,6 +20,10 @@ export interface AppState {
 	/* PLAYER */
 	player: PlayerModel;
 	updatePlayer: (changes: Partial<PlayerModel>) => void;
+
+	/* FLASHLIGHT */
+	isFlashlightOn: boolean;
+	toggleFlashlight: () => void;
 
 	/* GHOST */
 	ghost: PlayerModel;
@@ -69,95 +73,99 @@ const playerDefaultState: PlayerModel = {
 };
 
 export const useStore = create<AppState>()(
-	persist(
-		devtools((set) => ({
-			/* PLAYER */
-			player: playerDefaultState,
-			updatePlayer: (changes) =>
-				set(
-					produce((state: AppState) => {
-						state.player = { ...state.player, ...changes };
-					})
-				),
+	devtools((set) => ({
+		/* PLAYER */
+		player: playerDefaultState,
+		updatePlayer: (changes) =>
+			set(
+				produce((state: AppState) => {
+					state.player = { ...state.player, ...changes };
+				})
+			),
 
-			/* GHOST */
-			ghost: playerDefaultState,
-			updateGhost: (changes) =>
-				set(
-					produce((state: AppState) => {
-						state.ghost = { ...state.ghost, ...changes };
-					})
-				),
+		/* FLASHLIGHT  */
+		isFlashlightOn: true,
+		toggleFlashlight: () =>
+			set(
+				produce((state: AppState) => {
+					state.isFlashlightOn = !state.isFlashlightOn;
+				})
+			),
 
-			/* KEYS */
-			pressedKeys: [],
-			addKey: (key) =>
-				set(
-					produce((state: AppState) => {
-						if (!state.pressedKeys.includes(key)) {
-							state.pressedKeys.push(key);
+		/* GHOST */
+		ghost: playerDefaultState,
+		updateGhost: (changes) =>
+			set(
+				produce((state: AppState) => {
+					state.ghost = { ...state.ghost, ...changes };
+				})
+			),
+
+		/* KEYS */
+		pressedKeys: [],
+		addKey: (key) =>
+			set(
+				produce((state: AppState) => {
+					if (!state.pressedKeys.includes(key)) {
+						state.pressedKeys.push(key);
+					}
+				})
+			),
+		removeKey: (key) =>
+			set(
+				produce((state: AppState) => {
+					state.pressedKeys = state.pressedKeys.filter((x) => x != key);
+				})
+			),
+
+		/* GAME STATE */
+		state: GameState.MENU,
+		send: (e) =>
+			set(
+				produce((state: AppState) => {
+					switch (state.state) {
+						case GameState.MENU: {
+							if (e === GameEvent.START) {
+								state = restartGame(state);
+							}
+
+							break;
 						}
-					})
-				),
-			removeKey: (key) =>
-				set(
-					produce((state: AppState) => {
-						state.pressedKeys = state.pressedKeys.filter((x) => x != key);
-					})
-				),
 
-			/* GAME STATE */
-			state: GameState.MENU,
-			send: (e) =>
-				set(
-					produce((state: AppState) => {
-						switch (state.state) {
-							case GameState.MENU: {
-								if (e === GameEvent.START) {
-									state = restartGame(state);
-								}
-
-								break;
+						case GameState.RUNNING: {
+							if (e === GameEvent.LOST) {
+								state.state = GameState.LOST;
 							}
 
-							case GameState.RUNNING: {
-								if (e === GameEvent.LOST) {
-									state.state = GameState.LOST;
-								}
-
-								if (e === GameEvent.WON) {
-									state.state = GameState.WON;
-								}
-
-								break;
+							if (e === GameEvent.WON) {
+								state.state = GameState.WON;
 							}
 
-							case GameState.WON: {
-								if (e === GameEvent.START) {
-									state = restartGame(state);
-								}
-
-								break;
-							}
-
-							case GameState.LOST: {
-								if (e === GameEvent.START) {
-									state = restartGame(state);
-								}
-
-								break;
-							}
-
-							default: {
-							}
+							break;
 						}
-					})
-				),
-		})),
-		{
-			name: 'game-map',
-		}
-	)
+
+						case GameState.WON: {
+							if (e === GameEvent.START) {
+								state = restartGame(state);
+							}
+
+							break;
+						}
+
+						case GameState.LOST: {
+							if (e === GameEvent.START) {
+								state = restartGame(state);
+							}
+
+							break;
+						}
+
+						default: {
+						}
+					}
+				})
+			),
+	}))
 );
 
 export default useStore;

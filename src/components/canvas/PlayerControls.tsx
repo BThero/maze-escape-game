@@ -18,13 +18,23 @@ export const PlayerControls = () => {
 	const player = useStore((state) => state.player);
 	const updatePlayer = useStore((state) => state.updatePlayer);
 
+	const toggleFlashlight = useStore((store) => store.toggleFlashlight);
+
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
-			addKey(e.key);
+			if (e.key === ' ') {
+				toggleFlashlight();
+			} else {
+				addKey(e.key);
+			}
 		};
 
 		const handleKeyUp = (e: KeyboardEvent) => {
-			removeKey(e.key);
+			if (e.key === ' ') {
+				// ignore
+			} else {
+				removeKey(e.key);
+			}
 		};
 
 		document.addEventListener('keydown', handleKeyDown);

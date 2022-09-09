@@ -1,11 +1,6 @@
-import { useRef } from 'react';
-
 const Dom = ({ children }) => {
-	const ref = useRef(null);
-
 	return (
 		<div
-			className="dom"
 			style={{
 				position: 'absolute',
 				width: '100%',
@@ -15,7 +10,6 @@ const Dom = ({ children }) => {
 				zIndex: 10,
 				overflow: 'hidden',
 			}}
-			ref={ref}
 		>
 			{children}
 		</div>

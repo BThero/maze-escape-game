@@ -37,6 +37,7 @@ const Obstacle = ({ position, type }: ObstacleProps) => {
 		normalMap: 'textures/BrickWall/normal.jpeg',
 		roughnessMap: 'textures/BrickWall/roughness.jpeg',
 		aoMap: 'textures/BrickWall/ambientOcclusion.jpeg',
+		metallicMap: 'textures/BrickWall/metallic.jpeg',
 	});
 
 	return (

@@ -8,6 +8,7 @@ import { useThree } from '@react-three/fiber';
 const Flashlight = () => {
 	const { scene } = useThree();
 
+	const isFlashlightOn = useStore((state) => state.isFlashlightOn);
 	const direction = useStore((state) => state.player.velocity.direction);
 	const position = useStore((state) => state.player.position);
 	const elevatedPosition: Triplet = [position[0], 1, position[2]];
@@ -37,6 +38,7 @@ const Flashlight = () => {
 			shadow-camera-near={0.1}
 			shadow-camera-far={10}
 			distance={8}
+			intensity={isFlashlightOn ? 1 : 0}
 		>
 			<object3D ref={targetRef} position={target} />
 		</spotLight>
