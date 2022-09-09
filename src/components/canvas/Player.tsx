@@ -6,6 +6,7 @@ import { GameEvent, GameObjects } from '@/misc/enums';
 import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
+import { useMapStore } from '@/misc/mapStore';
 
 type GLTFResult = GLTF & {
 	nodes: {
@@ -39,8 +40,9 @@ type GLTFResult = GLTF & {
 const Player = (props: JSX.IntrinsicElements['group']) => {
 	const { nodes, materials } = useGLTF('models/pirate2.glb') as GLTFResult;
 	const group = useRef<THREE.Group>();
+
 	const send = useStore((state) => state.send);
-	const initialPosition: Triplet = [0, 1, 0];
+	const initialPosition = useMapStore((store) => store.playerPosition);
 	const [_ref, api] = useSphere<Mesh>(() => ({
 		mass: 1,
 		position: initialPosition,

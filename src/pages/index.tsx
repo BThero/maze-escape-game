@@ -10,11 +10,15 @@ import { PlayerControls } from '@/components/canvas/PlayerControls';
 import useStore from '@/misc/store';
 import { GameEvent, GameObjects, GameState } from '@/misc/enums';
 import PlayerLighting from '@/components/canvas/PlayerLighting';
+import Exit from '@/components/canvas/Exit';
 
 /* DOM */
 import WelcomeScreen from '@/components/dom/WelcomeScreen';
 import WonScreen from '@/components/dom/WonScreen';
 import LostScreen from '@/components/dom/LostScreen';
+import MapEditor from '@/components/dom/MapEditor';
+import { useMapStore } from '@/misc/mapStore';
+import { useEffect } from 'react';
 
 const DOM = () => {
 	const state = useStore((state) => state.state);
@@ -33,13 +37,30 @@ const DOM = () => {
 		}
 
 		default: {
-			return <></>;
+			return <MapEditor />;
 		}
 	}
 };
 
+const Objects = () => {
+	const objects = useMapStore((store) => store.objects);
+
+	return (
+		<>
+			{objects.map(({ x, y, type }, idx) => {
+				if (type === GameObjects.EXIT) {
+					return <Exit key={idx} position={[x, 0, y]} />;
+				} else {
+					return <Obstacle key={idx} position={[x, 0, y]} type={type} />;
+				}
+			})}
+		</>
+	);
+};
+
 const R3F = () => {
 	const state = useStore((state) => state.state);
+
 	const walls = Array.from({ length: ROWS }).map((_, i) => {
 		return Array.from({ length: COLUMNS }).map((_, j) => {
 			const types: Array<
@@ -60,12 +81,16 @@ const R3F = () => {
 			<PlayerControls />
 			<Camera />
 			<PlayerLighting />
+			{/* <ambientLight intensity={1} /> */}
 			<Physics gravity={[0, -50, 0]} isPaused={state !== GameState.RUNNING}>
+				{/* <Debug> */}
 				<Floor />
 				<Player />
 				<Ghost />
 				<Flashlight />
-				{walls}
+				<Objects />
+				{/* {walls} */}
+				{/* </Debug> */}
 			</Physics>
 		</>
 	);

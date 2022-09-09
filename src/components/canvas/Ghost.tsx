@@ -6,6 +6,7 @@ import { GLTF } from 'three-stdlib';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import useStore from '@/misc/store';
+import { useMapStore } from '@/misc/mapStore';
 
 type GLTFResult = GLTF & {
 	nodes: {
@@ -19,12 +20,14 @@ type GLTFResult = GLTF & {
 };
 
 const Ghost = (props: JSX.IntrinsicElements['group']) => {
-	const group = useRef<THREE.Group>();
-	const updateGhost = useStore((store) => store.updateGhost);
 	const { nodes, materials } = useGLTF('models/ghost2.glb') as GLTFResult;
+	const group = useRef<THREE.Group>();
+
+	const initialPosition = useMapStore((store) => store.ghostPosition);
+	const updateGhost = useStore((store) => store.updateGhost);
 	const [_ref, api] = useSphere<THREE.Mesh>(() => ({
 		mass: 1,
-		position: [5, 1, 5],
+		position: initialPosition,
 		args: [0.6],
 		onCollide: (e) => {
 			if (e.body.userData?.type === GameObjects.HUMAN) {
