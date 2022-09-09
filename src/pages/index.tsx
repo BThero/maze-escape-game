@@ -8,6 +8,8 @@ import Camera from '@/components/canvas/Camera';
 import { ROWS, COLUMNS, TILE_SIZE } from '@/misc/constants';
 import { PlayerControls } from '@/components/canvas/PlayerControls';
 import useStore from '@/misc/store';
+import useMapStore from '@/misc/mapStore';
+
 import { GameEvent, GameObjects, GameState } from '@/misc/enums';
 import PlayerLighting from '@/components/canvas/PlayerLighting';
 import Exit from '@/components/canvas/Exit';
@@ -16,9 +18,7 @@ import Exit from '@/components/canvas/Exit';
 import WelcomeScreen from '@/components/dom/WelcomeScreen';
 import WonScreen from '@/components/dom/WonScreen';
 import LostScreen from '@/components/dom/LostScreen';
-import MapEditor from '@/components/dom/MapEditor';
-import { useMapStore } from '@/misc/mapStore';
-import { useEffect } from 'react';
+import GameInterface from '@/components/dom/GameInterface';
 
 const DOM = () => {
 	const state = useStore((state) => state.state);
@@ -37,7 +37,7 @@ const DOM = () => {
 		}
 
 		default: {
-			return <MapEditor />;
+			return <GameInterface />;
 		}
 	}
 };

@@ -1,4 +1,4 @@
-import { useMapStore } from '@/misc/mapStore';
+import useMapStore from '@/misc/mapStore';
 import { useRef } from 'react';
 import { GameObjects } from '@/misc/enums';
 

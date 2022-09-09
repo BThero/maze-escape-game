@@ -22,7 +22,7 @@ export interface MapState {
 	clearObjects: () => void;
 }
 
-export const useMapStore = create<MapState>()(
+const useMapStore = create<MapState>()(
 	persist(
 		devtools((set) => ({
 			playerPosition: [1, 1, -1],
@@ -55,3 +55,5 @@ export const useMapStore = create<MapState>()(
 		}
 	)
 );
+
+export default useMapStore;

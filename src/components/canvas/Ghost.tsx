@@ -6,7 +6,7 @@ import { GLTF } from 'three-stdlib';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import useStore from '@/misc/store';
-import { useMapStore } from '@/misc/mapStore';
+import useMapStore from '@/misc/mapStore';
 
 type GLTFResult = GLTF & {
 	nodes: {

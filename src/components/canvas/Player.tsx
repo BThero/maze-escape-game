@@ -6,7 +6,7 @@ import { GameEvent, GameObjects } from '@/misc/enums';
 import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
-import { useMapStore } from '@/misc/mapStore';
+import useMapStore from '@/misc/mapStore';
 
 type GLTFResult = GLTF & {
 	nodes: {
