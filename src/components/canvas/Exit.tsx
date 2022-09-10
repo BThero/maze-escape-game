@@ -1,6 +1,6 @@
 import { Triplet } from '@react-three/cannon';
 import { useBox } from '@react-three/cannon';
-import { TILE_SIZE, WALL_HEIGHT, WALL_THICKNESS } from '@/misc/constants';
+import { TILE_SIZE } from '@/misc/constants';
 import type { Mesh } from 'three';
 import { GameObjects } from '@/misc/enums';
 

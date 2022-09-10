@@ -13,8 +13,8 @@ const CanvasWrapper = ({ children }) => {
 					left: 0,
 				}}
 			>
-				{/* <Stats showPanel={0} /> */}
-				{/* <Preload all /> */}
+				<Stats showPanel={0} />
+				<Preload all />
 				{children}
 			</Canvas>
 			<A11yAnnouncer />

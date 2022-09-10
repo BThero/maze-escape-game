@@ -8,31 +8,29 @@ type SceneLightProps = {
 };
 
 const SceneLight = ({ target, color }: SceneLightProps) => {
-	const ref = useRef(null);
+	const light = useRef(null);
+	const [ref, api] = target;
 
 	useEffect(() => {
-		const api = target[1];
-
 		if (api?.position?.subscribe) {
-			const unsub = api.position.subscribe((v) => {
-				if (ref.current) {
-					ref.current.position.x = v[0];
-					ref.current.position.z = v[2];
+			const unsubscribe = api.position.subscribe((v) => {
+				if (light.current) {
+					light.current.position.x = v[0];
+					light.current.position.z = v[2];
 				}
 			});
-
-			return unsub;
+			return unsubscribe;
 		}
-	}, [target]);
+	}, [api]);
 
 	return (
 		<spotLight
-			ref={ref}
+			ref={light}
 			color={color || 'white'}
 			intensity={0.2}
 			angle={0.12}
 			position={[0, 5, 0]}
-			target={target[0]?.current}
+			target={ref?.current}
 		/>
 	);
 };

@@ -46,7 +46,7 @@ const PlayerControls = () => {
 		};
 	}, [addKey, removeKey, toggleFlashlight]);
 
-	useFrame(({ clock }) => {
+	useFrame(() => {
 		const [ref, api] = player.obj;
 		const newState = produce(player, (player) => {
 			if (pressedKeys.includes('ArrowUp')) {

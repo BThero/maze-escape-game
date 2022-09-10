@@ -30,13 +30,13 @@ const Floor = (props: PlaneProps) => {
 				map-wrapS={THREE.RepeatWrapping}
 				map-wrapT={THREE.RepeatWrapping}
 				map-repeat={[20, 20]}
-				metalness={1} // set to 1 to use 100% of the metalnessMap
+				metalness={1}
 				metalnessMap-wrapS={THREE.RepeatWrapping}
 				metalnessMap-wrapT={THREE.RepeatWrapping}
 				normalMap-wrapS={THREE.RepeatWrapping}
 				normalMap-wrapT={THREE.RepeatWrapping}
 				normalMap-encoding={THREE.LinearEncoding}
-				roughness={1} // set to 1 to use 100% of the roughnessMap
+				roughness={1}
 				roughnessMap-wrapS={THREE.RepeatWrapping}
 				roughnessMap-wrapT={THREE.RepeatWrapping}
 			/>

@@ -147,5 +147,4 @@ const Player = (props: JSX.IntrinsicElements['group']) => {
 };
 
 useGLTF.preload('models/pirate2.glb');
-
 export default Player;
