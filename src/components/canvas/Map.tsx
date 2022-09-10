@@ -5,6 +5,7 @@ import Obstacle from './Obstacle';
 
 const Map = () => {
 	const objects = useMapStore((store) => store.objects);
+	console.log('obj', objects);
 
 	return (
 		<>
