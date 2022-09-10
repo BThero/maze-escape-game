@@ -1,4 +1,10 @@
+import React, { lazy } from 'react';
 import { Physics } from '@react-three/cannon';
+
+import useStore from '@/misc/store';
+import { GameState } from '@/misc/enums';
+
+/** CANVAS */
 import Floor from '@/components/canvas/Floor';
 import Player from '@/components/canvas/Player';
 import Ghost from '@/components/canvas/Ghost';
@@ -6,38 +12,46 @@ import Flashlight from '@/components/canvas/Flashlight';
 import Camera from '@/components/canvas/Camera';
 import PlayerControls from '@/components/canvas/PlayerControls';
 import BotControls from '@/components/canvas/BotControls';
-import useStore from '@/misc/store';
-
-import { GameState } from '@/misc/enums';
+import Map from '@/components/canvas/Map';
 import PlayerLighting from '@/components/canvas/PlayerLighting';
 
 /* DOM */
-import WelcomeScreen from '@/components/dom/WelcomeScreen';
-import WonScreen from '@/components/dom/WonScreen';
-import LostScreen from '@/components/dom/LostScreen';
-import GameInterface from '@/components/dom/GameInterface';
-import Map from '@/components/canvas/Map';
+const WelcomeScreen = lazy(() => import('@/components/dom/WelcomeScreen'));
+const WonScreen = lazy(() => import('@/components/dom/WonScreen'));
+const LostScreen = lazy(() => import('@/components/dom/LostScreen'));
+const GameInterface = lazy(() => import('@/components/dom/GameInterface'));
 
 const DOM = () => {
 	const state = useStore((state) => state.state);
+	let Component;
 
 	switch (state) {
 		case GameState.MENU: {
-			return <WelcomeScreen />;
+			Component = WelcomeScreen;
+			break;
 		}
 
 		case GameState.WON: {
-			return <WonScreen />;
+			Component = WonScreen;
+			break;
 		}
 
 		case GameState.LOST: {
-			return <LostScreen />;
+			Component = LostScreen;
+			break;
 		}
 
 		default: {
-			return <GameInterface />;
+			Component = GameInterface;
+			break;
 		}
 	}
+
+	return (
+		<React.Suspense fallback={<></>}>
+			<Component />
+		</React.Suspense>
+	);
 };
 
 const R3F = () => {
