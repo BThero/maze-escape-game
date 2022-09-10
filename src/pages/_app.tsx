@@ -20,14 +20,14 @@ const AppLayout = ({ children }) => {
 	return newChildren;
 };
 
-function App({ Component, pageProps = { title: 'index' } }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
 	// Get the children from each page so we can split them
 	//@ts-ignore
 	const children = Component(pageProps).props.children;
 
 	return (
 		<>
-			<Header title={pageProps.title} />
+			<Header />
 			<AppLayout>{children}</AppLayout>
 		</>
 	);

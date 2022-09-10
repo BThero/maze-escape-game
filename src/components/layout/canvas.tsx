@@ -13,7 +13,6 @@ const CanvasWrapper = ({ children }) => {
 					left: 0,
 				}}
 			>
-				<Stats showPanel={0} />
 				<Preload all />
 				{children}
 			</Canvas>

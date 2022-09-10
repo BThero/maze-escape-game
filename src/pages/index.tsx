@@ -47,6 +47,7 @@ const DOM = () => {
 		}
 	}
 
+	/** TODO: Implement loading screen & transitions */
 	return (
 		<React.Suspense fallback={<></>}>
 			<Component />
