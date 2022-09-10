@@ -1,10 +1,9 @@
-import { Triplet, useSphere } from '@react-three/cannon';
-import { GameObjects } from '@/misc/enums';
+import { CollideEvent, Triplet, useSphere } from '@react-three/cannon';
+import { GameEvent, GameObjects } from '@/misc/enums';
 import { useEffect, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
 import useStore from '@/misc/store';
 import useMapStore from '@/misc/mapStore';
 
@@ -23,21 +22,24 @@ const Ghost = (props: JSX.IntrinsicElements['group']) => {
 	const { nodes, materials } = useGLTF('models/ghost2.glb') as GLTFResult;
 	const group = useRef<THREE.Group>();
 
+	const send = useStore((store) => store.send);
 	const initialPosition = useMapStore((store) => store.ghostPosition);
-	const updateGhost = useStore((store) => store.updateGhost);
 	const [_ref, api] = useSphere<THREE.Mesh>(() => ({
 		mass: 1,
 		position: initialPosition,
 		args: [0.6],
-		onCollide: (e) => {
-			if (e.body.userData?.type === GameObjects.HUMAN) {
-				console.log('player lost');
-			}
-		},
+		onCollide: handleCollide,
 		userData: {
 			type: GameObjects.GHOST,
 		},
 	}));
+	const updateGhost = useStore((store) => store.updateGhost);
+	const pos = useRef<Triplet>(initialPosition);
+	const handleCollide = (e: CollideEvent) => {
+		if (e.body?.userData?.type === GameObjects.HUMAN) {
+			send(GameEvent.LOST);
+		}
+	};
 
 	useEffect(() => {
 		if (group.current) {
@@ -49,9 +51,13 @@ const Ghost = (props: JSX.IntrinsicElements['group']) => {
 
 	useEffect(() => {
 		const unsubscribe = api.position.subscribe((v) => {
-			group.current.position.x = v[0];
-			group.current.position.y = v[1];
-			group.current.position.z = v[2];
+			if (v != pos.current) {
+				pos.current = v;
+				group.current.position.set(...v);
+				updateGhost({
+					position: pos.current,
+				});
+			}
 		});
 		return unsubscribe;
 	});

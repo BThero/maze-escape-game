@@ -76,9 +76,7 @@ const Player = (props: JSX.IntrinsicElements['group']) => {
 		const unsubscribe = api.position.subscribe((v) => {
 			if (v != pos.current) {
 				pos.current = v;
-				group.current.position.x = v[0];
-				group.current.position.y = v[1];
-				group.current.position.z = v[2];
+				group.current.position.set(...v);
 				updatePlayer({
 					position: pos.current,
 				});

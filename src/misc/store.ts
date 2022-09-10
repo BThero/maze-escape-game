@@ -40,18 +40,37 @@ export interface AppState {
 }
 
 const restartGame = (state: AppState): AppState => {
-	const { obj } = state.player;
+	/** TODO: Make this dynamic */
+	const { obj: playerObj } = state.player;
+	const { obj: ghostObj } = state.ghost;
 
-	if (obj) {
-		const [_ref, api] = obj;
-		api.position.set(0, 0, 0);
+	if (playerObj) {
+		const [_ref, api] = playerObj;
+		api.position.set(1, 1, -1);
+		api.velocity.set(0, 0, 0);
+	}
+
+	if (ghostObj) {
+		const [_ref, api] = ghostObj;
+		api.position.set(9, 1, -7);
 		api.velocity.set(0, 0, 0);
 	}
 
 	state.player = {
 		...state.player,
 		...{
-			position: [0, 0, 0],
+			position: [1, 1, -1],
+			velocity: {
+				direction: 0,
+				magnitude: 0,
+			},
+		},
+	};
+
+	state.ghost = {
+		...state.ghost,
+		...{
+			position: [9, 1, -7],
 			velocity: {
 				direction: 0,
 				magnitude: 0,

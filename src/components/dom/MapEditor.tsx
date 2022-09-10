@@ -46,8 +46,6 @@ const MapEditor = () => {
 			}
 		}
 
-		console.log({ x, y, type });
-
 		toggleObject({
 			x: x * 2,
 			y: y * 2,

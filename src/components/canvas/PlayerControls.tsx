@@ -10,7 +10,7 @@ import { useFrame } from '@react-three/fiber';
 import produce from 'immer';
 import { useEffect } from 'react';
 
-export const PlayerControls = () => {
+const PlayerControls = () => {
 	const pressedKeys = useStore((state) => state.pressedKeys);
 	const addKey = useStore((state) => state.addKey);
 	const removeKey = useStore((state) => state.removeKey);
@@ -44,7 +44,7 @@ export const PlayerControls = () => {
 			document.removeEventListener('keydown', handleKeyDown);
 			document.removeEventListener('keyup', handleKeyUp);
 		};
-	}, [addKey, removeKey]);
+	}, [addKey, removeKey, toggleFlashlight]);
 
 	useFrame(({ clock }) => {
 		const [ref, api] = player.obj;
@@ -77,3 +77,5 @@ export const PlayerControls = () => {
 
 	return null;
 };
+
+export default PlayerControls;
