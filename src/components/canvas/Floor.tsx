@@ -18,7 +18,6 @@ const Floor = (props: PlaneProps) => {
 		map: 'textures/ConcreteFloor/baseColor.jpeg',
 		normalMap: 'textures/ConcreteFloor/normal.jpeg',
 		roughnessMap: 'textures/ConcreteFloor/roughness.jpeg',
-		aoMap: 'textures/ConcreteFloor/ambientOcclusion.jpeg',
 		metalnessMap: 'textures/ConcreteFloor/metallic.jpeg',
 	});
 

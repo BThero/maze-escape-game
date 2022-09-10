@@ -38,7 +38,7 @@ type GLTFResult = GLTF & {
 };
 
 const Player = (props: JSX.IntrinsicElements['group']) => {
-	const { nodes, materials } = useGLTF('models/pirate2.glb') as GLTFResult;
+	const { nodes, materials } = useGLTF('models/pirate.glb') as GLTFResult;
 	const group = useRef<THREE.Group>();
 
 	const send = useStore((state) => state.send);
@@ -146,5 +146,5 @@ const Player = (props: JSX.IntrinsicElements['group']) => {
 	);
 };
 
-useGLTF.preload('models/pirate2.glb');
+useGLTF.preload('models/pirate.glb');
 export default Player;

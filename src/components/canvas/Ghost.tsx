@@ -19,7 +19,7 @@ type GLTFResult = GLTF & {
 };
 
 const Ghost = (props: JSX.IntrinsicElements['group']) => {
-	const { nodes, materials } = useGLTF('models/ghost2.glb') as GLTFResult;
+	const { nodes, materials } = useGLTF('models/ghost.glb') as GLTFResult;
 	const group = useRef<THREE.Group>();
 
 	const send = useStore((store) => store.send);
@@ -80,5 +80,5 @@ const Ghost = (props: JSX.IntrinsicElements['group']) => {
 	);
 };
 
-useGLTF.preload('models/ghost2.glb');
+useGLTF.preload('models/ghost.glb');
 export default Ghost;
