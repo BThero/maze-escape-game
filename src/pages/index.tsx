@@ -1,16 +1,15 @@
-import { Physics, Debug, Triplet } from '@react-three/cannon';
+import { Physics } from '@react-three/cannon';
 import Floor from '@/components/canvas/Floor';
 import Player from '@/components/canvas/Player';
 import Ghost from '@/components/canvas/Ghost';
 import Flashlight from '@/components/canvas/Flashlight';
 import Obstacle from '@/components/canvas/Obstacle';
 import Camera from '@/components/canvas/Camera';
-import { ROWS, COLUMNS, TILE_SIZE } from '@/misc/constants';
 import { PlayerControls } from '@/components/canvas/PlayerControls';
 import useStore from '@/misc/store';
 import useMapStore from '@/misc/mapStore';
 
-import { GameEvent, GameObjects, GameState } from '@/misc/enums';
+import { GameObjects, GameState } from '@/misc/enums';
 import PlayerLighting from '@/components/canvas/PlayerLighting';
 import Exit from '@/components/canvas/Exit';
 
@@ -61,36 +60,17 @@ const Objects = () => {
 const R3F = () => {
 	const state = useStore((state) => state.state);
 
-	const walls = Array.from({ length: ROWS }).map((_, i) => {
-		return Array.from({ length: COLUMNS }).map((_, j) => {
-			const types: Array<
-				GameObjects.VERTICAL_WALL | GameObjects.HORIZONTAL_WALL
-			> = [GameObjects.VERTICAL_WALL, GameObjects.HORIZONTAL_WALL];
-
-			return types.map((type, index) => {
-				if (Math.random() < 0.3) {
-					const base: Triplet = [i * TILE_SIZE, 0, j * TILE_SIZE];
-					return <Obstacle position={base} type={type} key={index} />;
-				}
-			});
-		});
-	});
-
 	return (
 		<>
 			<PlayerControls />
 			<Camera />
 			<PlayerLighting />
-			{/* <ambientLight intensity={1} /> */}
 			<Physics gravity={[0, -50, 0]} isPaused={state !== GameState.RUNNING}>
-				{/* <Debug> */}
 				<Floor />
 				<Player />
 				<Ghost />
 				<Flashlight />
 				<Objects />
-				{/* {walls} */}
-				{/* </Debug> */}
 			</Physics>
 		</>
 	);

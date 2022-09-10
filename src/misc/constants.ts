@@ -3,8 +3,6 @@
 export const TILE_SIZE = 2;
 export const WALL_HEIGHT = 3;
 export const WALL_THICKNESS = 0.1;
-export const ROWS = 20;
-export const COLUMNS = 20;
 
 // PLAYER CONTROLS
 
